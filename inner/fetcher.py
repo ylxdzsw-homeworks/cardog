@@ -1,4 +1,4 @@
-# encoding: utf8
+# encoding: utf-8
 
 import requests as req
 from lxml import etree as xml
@@ -54,7 +54,7 @@ def query_history(userid, start_date, end_date, agent):
 def retrive_link_from_page(page):
     return xml.HTML(page.text).xpath("//form")[0].attrib["action"]
 
-def read_all_pages(res):
+def read_all_pages(res, agent):
     while True:
         current_page = xml.HTML(res.text)
         yield current_page
@@ -69,6 +69,7 @@ def read_all_pages(res):
             else:
                 break
         except Exception as e:
+            print(e)
             break
 
 def parse_page(page):
@@ -87,13 +88,13 @@ def fetch(query, username, password):
     userid = find_userid(agent)
     cursor = query(userid, agent)
     result = []
-    for page in read_all_pages(cursor):
+    for page in read_all_pages(cursor, agent):
         result.extend(parse_page(page))
     return result
 
 def fetch_today(*args):
-    fetch(query_today, *args)
+    return fetch(query_today, *args)
 
-def fetch_history(start_date, end_date, *args)
+def fetch_history(start_date, end_date, *args):
     query = lambda userid, agent: query_history(userid, start_date, end_date, agent)
-    fetch(query, *args)
+    return fetch(query, *args)
