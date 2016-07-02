@@ -1,8 +1,15 @@
 package com.ylxdzsw.cardog;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -43,6 +50,7 @@ public class TodayActivity extends AppCompatActivity {
 
         records  = new ArrayList<>();
         listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(new RecordAdapter(this));
 
         new Thread(this::query).start();
     }
@@ -99,5 +107,24 @@ public class TodayActivity extends AppCompatActivity {
 
     private void updateView() {
         Toast.makeText(this, "fuck", Toast.LENGTH_SHORT).show();
+        ((RecordAdapter) listView.getAdapter()).notifyDataSetChanged();
+    }
+
+    class RecordAdapter extends ArrayAdapter<Record> {
+        public RecordAdapter(Context context) {
+            super(context, 0, records);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Record data = getItem(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.record_item, parent, false);
+            }
+            ((TextView) convertView.findViewById(R.id.record_time))  .setText(data.time);
+            ((TextView) convertView.findViewById(R.id.record_loc))   .setText(data.loc);
+            ((TextView) convertView.findViewById(R.id.record_amount)).setText(data.amount);
+            return convertView;
+        }
     }
 }

@@ -45,9 +45,6 @@ end
     :mixin => defaultmixin
 
     :POST | json => begin
-        println("connected!")
-        println(req[:body])
-
         @destructure username, password, period
 
         query_id = datalock.serial_num += 1
