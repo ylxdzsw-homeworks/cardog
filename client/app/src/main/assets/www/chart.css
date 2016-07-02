@@ -1,0 +1,26 @@
+#wrapper {
+    overflow-x: auto;
+}
+
+#chart {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.op {
+    color: #ae81ff;
+}
+
+.pr {
+    color: #42b983;
+}
+
+.rs {
+    color: #e96900;
+}
+
+.er {
+    color: #ff6666;
+}
